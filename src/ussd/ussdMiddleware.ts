@@ -1,4 +1,4 @@
-import { goBack, goToMainMenu } from "./ussdMenus";
+import { goBack, goToMainMenu } from "./menus";
 
 const menuMiddleware = (text: string) => {
     return goBack(goToMainMenu(text));

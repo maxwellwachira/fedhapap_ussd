@@ -9,7 +9,7 @@ const sendSingleSms = (phoneNumber: string, message:string) => {
 }
 
 const findUserByPhoneNumber = (mobileNUmber: string) => {
-    return false;
+    return true;
 }
 
 export {
