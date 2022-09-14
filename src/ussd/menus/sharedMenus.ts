@@ -1,7 +1,7 @@
 const languageMenu = () => {
     return `CON Karibu!! Chagua Lugha
         1. English
-        2. Kiswahili
+        2. Swahili
     `;
 }
 
@@ -17,8 +17,8 @@ const goBack = (text: string) => {
 
 const goToMainMenu = (text: string) => {
     const textArray = text.split("*");
-    while (textArray.includes('00')) {
-        let firstIndex = textArray.indexOf('00');
+    while (textArray.includes('99')) {
+        let firstIndex = textArray.indexOf('99');
         textArray.splice(firstIndex+1);
     }
     return textArray.join('*');
