@@ -1,3 +1,5 @@
+import { registerUser } from "../ussdService";
+
 class EnglishMenus {
 
     mainMenuRegistered(name: string, isUserVerified: boolean){
@@ -21,7 +23,7 @@ class EnglishMenus {
         `;
     }
 
-    registerMenu(textArray: Array<string>, phoneNumber: string){
+    async registerMenu(textArray: Array<string>, phoneNumber: string){
         let level = textArray.length;
         let response = "";
 
@@ -29,21 +31,36 @@ class EnglishMenus {
             case 2:
                 response = `CON Please enter your full name: `;
                 break;
-            case 3:
-                response = `CON Please enter set you PIN: `;
+            case 3: 
+                response = `CON Please enter your National ID Number: `;
                 break;
-            case 4:
-                response = `CON Please re-enter your PIN: `;
+            case 4: 
+                response = `CON Please enter your Title Deed Number: `;
                 break;
             case 5:
+                response = `CON Please enter set you PIN: `;
+                break;
+            case 6:
+                response = `CON Please re-enter your PIN: `;
+                break;
+            case 7:
                 const name = textArray[2];
-                const pin = textArray[3];
-                const confirmPin = textArray[4];
+                const idNo = textArray[3];
+                const titleDeedNo = textArray[4];
+                const pin = textArray[5];
+                const confirmPin = textArray[6];
                 //console.log(textArray);
 
-                pin != confirmPin ? 
-                    response = `END Your pins do not match. Please try again` :
-                    response = `END You have been registered`;
+                if(pin != confirmPin){
+                    return `END Your pins do not match. Please try again`;
+                }
+                
+                const user = await registerUser(name, idNo, titleDeedNo, pin, phoneNumber);
+                
+                user?.phoneNumberConfirmed ? 
+                    response = `END You have been registered`:
+                    response = `END An error has occurred`;
+
                 break;
             default: 
                 response = `END Invalid Entry`;
@@ -53,34 +70,25 @@ class EnglishMenus {
         return response;
     }
 
-    mainMenuAccount(){
-        return `CON Select where to send money to:
-            1. Check Balance
-        `;
-    }
-
     account(textArray: Array<string>, phoneNumber: string){
         let level = textArray.length;
         let response = "";
 
         switch (level) {
             case 2:
-                response = this.mainMenuAccount();
+                response = `CON Reply with:
+                    1. Check Balance
+                `;
                 break;
-
-        
+            case 3: 
+                response = `END To be implemented`;
+                break;
             default:
+                response = `END Invalid entry`;
                 break;
         }
 
         return response;
-    }
-
-    mainMenuSendMoney (){
-        return `CON Select where to send money to:
-            1. My Number
-            2. Other Number
-        `;
     }
 
     sendMoney (textArray: Array<string>, phoneNumber: string){
@@ -89,7 +97,10 @@ class EnglishMenus {
 
         switch(level){
             case 2:
-                response = this.mainMenuSendMoney()
+                response = `CON Select where to send money to:
+                    1. My Number
+                    2. Other Number
+                `;
                 break;
             case 3:
                 textArray[2] === '1' ?
@@ -111,30 +122,30 @@ class EnglishMenus {
                 break;
             case 6:
                 if(textArray[2] === '1' && textArray[5] === '1'){
-
+                    response = `END To be implemented`;
                 }else if (textArray[2] === '1' && textArray[5] === '2') {
-                    response = 'END Canceled. Thank you for using our service';
+                    response = 'END Cancelled. Thank you for using our service';
                 }else if (textArray[2] === '2'){
                     response = `CON Send Ksh. ${textArray[4]} to ${textArray[3]}: 
                         1. Confirm
                         2. Cancel
                     `;
                 } else{
-                    response = `Invalid entry`;
+                    response = `END Invalid entry`;
                 }
                 break;
 
             case 7:
                 if(textArray[2] === '2' && textArray[6] === '1'){
-
+                    response = `END To be implemented`;
                 }else if (textArray[2] === '2' && textArray[6] === '2') {
-                    response = 'END Canceled. Thank you for using our service';
+                    response = 'END Cancelled. Thank you for using our service';
                 } else{
-                    response = `Invalid entry`;
+                    response = `END Invalid entry`;
                 }
                 break;
             default:
-                response = `Invalid entry`;
+                response = `END Invalid entry`;
                 break;
 
         }
