@@ -3,21 +3,30 @@ import { Request, Response } from 'express';
 import { findUserByPhoneNumber } from './ussdService';
 import {
     EnglishMenus,
-    goBack,
-    goToMainMenu,
     KiswahiliMenus,
     languageMenu,
 } from './menus';
 import { menuMiddleware } from './ussdMiddleware';
 
 
-const listener = (req: Request, res: Response) => {
+const listener = async (req: Request, res: Response) => {
     let { sessionId, serviceCode, phoneNumber, text } = req.body;
     text = menuMiddleware(text);
+    let isUserRegistered = false;
+    let isUserVerified = false;
+    let name = "";
     let response = "";
-    const name = 'Maxwell';
-    const isUserRegisterd = findUserByPhoneNumber(phoneNumber);
-    const isUserVerified = true;
+
+    const user = await findUserByPhoneNumber(phoneNumber);
+   
+    if(user?.phoneNumberConfirmed){
+        isUserRegistered = true;
+        name = user.userName;
+    }
+
+    if(user?.isActive){
+        isUserVerified = true;
+    }
 
     if(text === ""){
         //first menu to select language
@@ -29,12 +38,12 @@ const listener = (req: Request, res: Response) => {
         if(textArray.length === 1){
           switch(textArray[0]){
             case '1': //English Language
-                isUserRegisterd ? 
+                isUserRegistered ? 
                     response = EnglishMenus.mainMenuRegistered(name, isUserVerified) : 
                     response = EnglishMenus.mainMenuUnRegistered();
                 break;
             case '2': //Kiswahili Language
-                isUserRegisterd ? 
+                isUserRegistered ? 
                     response = KiswahiliMenus.mainMenuRegistered(name, isUserVerified) : 
                     response = KiswahiliMenus.mainMenuUnRegistered();
                 break;
@@ -42,11 +51,11 @@ const listener = (req: Request, res: Response) => {
                 response = `END Invalid choice. Please try again`;
                 break;
           }
-        }else if(textArray.length > 1 && !isUserRegisterd){
+        }else if(textArray.length > 1 && !isUserRegistered){
             switch (textArray[1]){
                 case '1': 
                     textArray[0] === '1' ? 
-                        response = EnglishMenus.registerMenu(textArray, phoneNumber) : 
+                        response = await EnglishMenus.registerMenu(textArray, phoneNumber) : 
                         response = KiswahiliMenus.registerMenu(textArray, phoneNumber);
                     break;
                 case '2':
@@ -60,20 +69,28 @@ const listener = (req: Request, res: Response) => {
                         response = `END Chaguo lako sio sahihi. Jaribu tena`;
                     break;
             }
-        }else if(textArray.length > 1 && isUserRegisterd){
+        }else if(textArray.length > 1 && isUserRegistered){
           
             switch (textArray[1]) {
                 case '1':
-                    response = EnglishMenus.account(textArray, phoneNumber);
+                    textArray[0] === '1' ? 
+                        response = EnglishMenus.account(textArray, phoneNumber) :
+                        response = KiswahiliMenus.account(textArray, phoneNumber)
                     break;
                 case '2':
-                    response = EnglishMenus.sendMoney(textArray, phoneNumber);
+                    textArray[0] === '1' ? 
+                        response = EnglishMenus.sendMoney(textArray, phoneNumber) :
+                        response = KiswahiliMenus.sendMoney(textArray, phoneNumber);
                     break;
                 case '3':
-                    response = `END Coming Soon`;
+                    textArray[0] === '1' ? 
+                        response = `END Coming Soon!`:
+                        response = `END Inakuja hivi karibuni!`;
                     break;         
                 case '4':
-                    response = `END Coming Soon`;
+                    textArray[0] === '1' ? 
+                        response = `END Coming Soon!`:
+                        response = `END Inakuja hivi karibuni!`;
                     break;
                 default:
                     textArray[0] === '1' ? 
@@ -81,10 +98,16 @@ const listener = (req: Request, res: Response) => {
                         response = `END Chaguo lako sio sahihi. Jaribu tena`;
                     break;
             } 
-        }   
-    }
-       
-    console.log(text);
+        }
+
+        if(!response.includes('END')){
+            textArray[0] === '1' ? 
+                response = response  + `98. Go Back`:
+                response = response + `98. Rudi Nyuma`;
+        }
+        
+    }   
+    //console.log(text);
     res.set("Content-Type: text/plain");
     res.send(response);
 
