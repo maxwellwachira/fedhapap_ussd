@@ -7,7 +7,7 @@ class EnglishMenus {
         isUserVerified ? 
             response =  `CON  Welcome ${name}. Reply with: 
                 1. Account
-                2. Send Money
+                2. Withdraw Cash
                 3. E-loan
                 4. Pay Bills
             `: 
@@ -97,48 +97,21 @@ class EnglishMenus {
 
         switch(level){
             case 2:
-                response = `CON Select where to send money to:
-                    1. My Number
-                    2. Other Number
-                `;
+                response = `CON Enter amount: `;
                 break;
             case 3:
-                textArray[2] === '1' ?
-                    response = `CON Enter amount: ` :
-                    response = `CON Enter mobile number of the receiver: `;
+                response = `CON Enter Pin: `;
                 break;
             case 4:
-                textArray[2] === '1' ?
-                    response = `CON Enter Pin: ` :
-                    response = `CON Enter amount: `;
-                break;
-            case 5:
-                textArray[2] === '1' ?
-                    response = `CON Send Ksh. ${textArray[3]} to ${phoneNumber}: 
-                        1. Confirm
-                        2. Cancel
-                    `:
-                    response = `CON Enter Pin: `;
+                response = `CON Send Ksh. ${textArray[3]} to ${phoneNumber}: 
+                    1. Confirm
+                    2. Cancel
+                `;
                 break;
             case 6:
-                if(textArray[2] === '1' && textArray[5] === '1'){
+                if(textArray[4] === '1'){
                     response = `END To be implemented`;
-                }else if (textArray[2] === '1' && textArray[5] === '2') {
-                    response = 'END Cancelled. Thank you for using our service';
-                }else if (textArray[2] === '2'){
-                    response = `CON Send Ksh. ${textArray[4]} to ${textArray[3]}: 
-                        1. Confirm
-                        2. Cancel
-                    `;
-                } else{
-                    response = `END Invalid entry`;
-                }
-                break;
-
-            case 7:
-                if(textArray[2] === '2' && textArray[6] === '1'){
-                    response = `END To be implemented`;
-                }else if (textArray[2] === '2' && textArray[6] === '2') {
+                }else if (textArray[4] === '2') {
                     response = 'END Cancelled. Thank you for using our service';
                 } else{
                     response = `END Invalid entry`;
