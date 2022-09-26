@@ -109,9 +109,9 @@ class EnglishMenus {
                 `;
                 break;
             case 6:
-                if(textArray[2] === '1'){
+                if(textArray[3] === '1'){
                     response = `END To be implemented`;
-                }else if (textArray[2] === '2') {
+                }else if (textArray[3] === '2') {
                     response = 'END Cancelled. Thank you for using our service';
                 } else{
                     response = `END Invalid entry`;
