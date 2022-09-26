@@ -108,9 +108,9 @@ class EnglishMenus {
                     2. Cancel
                 `;
                 break;
-            case 6:
+            case 5:
                 if(textArray[3] === '1'){
-                    response = `END To be implemented`;
+                    response = `Ksh ${textArray[2]}has been sent to ${phoneNumber}. Thank you for using our services`;
                 }else if (textArray[3] === '2') {
                     response = 'END Cancelled. Thank you for using our service';
                 } else{
