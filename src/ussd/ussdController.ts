@@ -13,7 +13,7 @@ const listener = async (req: Request, res: Response) => {
     let { sessionId, serviceCode, phoneNumber, text } = req.body;
     text = menuMiddleware(text);
     let isUserRegistered = false;
-    let isUserVerified = false;
+    let isUserVerified = true;
     let name = "";
     let response = "";
 
