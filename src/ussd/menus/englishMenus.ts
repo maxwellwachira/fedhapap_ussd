@@ -103,15 +103,15 @@ class EnglishMenus {
                 response = `CON Enter Pin: `;
                 break;
             case 4:
-                response = `CON Send Ksh. ${textArray[3]} to ${phoneNumber}: 
+                response = `CON Send Ksh. ${textArray[2]} to ${phoneNumber}: 
                     1. Confirm
                     2. Cancel
                 `;
                 break;
             case 6:
-                if(textArray[4] === '1'){
+                if(textArray[2] === '1'){
                     response = `END To be implemented`;
-                }else if (textArray[4] === '2') {
+                }else if (textArray[2] === '2') {
                     response = 'END Cancelled. Thank you for using our service';
                 } else{
                     response = `END Invalid entry`;
